@@ -1,5 +1,9 @@
 # FargoMsse663AngularApp
 
+The application is deployed on railway and automatically redeploys on commits to the main branch. You can see the app here:
+
+https://msse663-angular-production.up.railway.app/
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.7.
 
 ## Development server
