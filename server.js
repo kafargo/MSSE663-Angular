@@ -14,8 +14,8 @@ app.get("/*", function (req, res) {
   );
 });
 
-// Start the app by listening on the default Railway port
-const port = process.env.PORT || 4200;
+// Start the app by listening on a different port than Angular's dev server
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`App listening on port ${port}`);
+  console.log(`Express server listening on port ${port}`);
 });

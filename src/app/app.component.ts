@@ -10,4 +10,8 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'Hello World!';
+
+  constructor() {
+    console.log('AppComponent initialized');
+  }
 }
