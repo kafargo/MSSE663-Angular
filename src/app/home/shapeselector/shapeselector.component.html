@@ -1,0 +1,42 @@
+<div class="shape-selector-container">
+  <!-- Display shape selector buttons when no shape is selected -->
+  <div *ngIf="!selectedShape" class="shape-buttons">
+    <h2>Select a Shape</h2>
+    <div class="button-container">
+      <button class="shape-button" (click)="selectShape('circle')">
+        <img src="assets/circle.svg" alt="Circle" />
+        <span>Circle</span>
+      </button>
+      <button class="shape-button" (click)="selectShape('square')">
+        <img src="assets/square.svg" alt="Square" />
+        <span>Square</span>
+      </button>
+      <button class="shape-button" (click)="selectShape('triangle')">
+        <img src="assets/triangle.svg" alt="Triangle" />
+        <span>Triangle</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Display selected shape component -->
+  <div *ngIf="selectedShape === 'circle'">
+    <app-circle></app-circle>
+    <button class="back-button" (click)="back()">
+      Back to Shape Selection
+    </button>
+  </div>
+
+  <div *ngIf="selectedShape === 'square'">
+    <app-square></app-square>
+    <button class="back-button" (click)="back()">
+      Back to Shape Selection
+    </button>
+  </div>
+
+  <div *ngIf="selectedShape === 'triangle'">
+    <app-triangle></app-triangle>
+    <button class="back-button" (click)="back()">
+      Back to Shape Selection
+    </button>
+  </div>
+</div>

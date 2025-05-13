@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
+import { ShapeselectorComponent } from './shapeselector/shapeselector.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [ShapeselectorComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-  title = 'Hello World!';
-  
   constructor() {
     console.log('HomeComponent initialized');
   }
