@@ -15,4 +15,103 @@
       </ul>
     </div>
   </div>
+
+  <!-- Triangle Practice Section -->
+  <div class="practice-section">
+    <h3>Triangle Practice</h3>
+    <p>
+      Practice calculating triangle properties with these 4 random triangles:
+    </p>
+
+    <div *ngIf="loading" class="loading-spinner">Loading triangles...</div>
+
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+      <button (click)="fetchTriangles()" class="retry-button">Try Again</button>
+    </div>
+
+    <div
+      *ngIf="!loading && !error && triangles.length === 0"
+      class="no-triangles"
+    >
+      No triangles available for practice.
+    </div>
+
+    <div
+      *ngIf="!loading && !error && practiceTriangles.length > 0"
+      class="practice-triangles"
+    >
+      <div class="practice-triangles-grid">
+        <div
+          *ngFor="let triangle of practiceTriangles"
+          class="practice-triangle-card"
+        >
+          <h4>Triangle</h4>
+          <div class="triangle-sides">
+            <p><strong>Side A:</strong> {{ triangle.sideA }}</p>
+            <p><strong>Side B:</strong> {{ triangle.sideB }}</p>
+            <p><strong>Side C:</strong> {{ triangle.sideC }}</p>
+          </div>
+
+          <div class="practice-answers">
+            <div class="answer-group">
+              <label for="perimeter-{{ triangle._id }}">Perimeter:</label>
+              <input
+                type="number"
+                id="perimeter-{{ triangle._id }}"
+                [(ngModel)]="triangle.userPerimeter"
+                (input)="checkAnswer(triangle, 'perimeter')"
+                [ngClass]="{
+                  correct: triangle.isPerimeterCorrect === true,
+                  incorrect: triangle.isPerimeterCorrect === false
+                }"
+                step="0.01"
+              />
+            </div>
+
+            <div class="answer-group">
+              <label for="area-{{ triangle._id }}">Area:</label>
+              <input
+                type="number"
+                id="area-{{ triangle._id }}"
+                [(ngModel)]="triangle.userArea"
+                (input)="checkAnswer(triangle, 'area')"
+                [ngClass]="{
+                  correct: triangle.isAreaCorrect === true,
+                  incorrect: triangle.isAreaCorrect === false
+                }"
+                step="0.01"
+              />
+            </div>
+
+            <div class="answer-group">
+              <label for="type-{{ triangle._id }}">Type:</label>
+              <select
+                id="type-{{ triangle._id }}"
+                [(ngModel)]="triangle.userType"
+                (change)="checkAnswer(triangle, 'type')"
+                [ngClass]="{
+                  correct: triangle.isTypeCorrect === true,
+                  incorrect: triangle.isTypeCorrect === false
+                }"
+              >
+                <option [ngValue]="undefined" disabled selected>
+                  Select type
+                </option>
+                <option *ngFor="let type of triangleTypes" [value]="type">
+                  {{ type }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="practice-controls">
+        <button (click)="getNewPracticeSet()" class="new-practice-set-button">
+          Get New Practice Set
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

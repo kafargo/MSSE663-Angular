@@ -2,17 +2,50 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TriangleComponent } from './triangle.component';
 import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { of, throwError } from 'rxjs';
+import { TriangleService } from '../../../services/triangle.service';
 
 describe('TriangleComponent', () => {
   let component: TriangleComponent;
   let fixture: ComponentFixture<TriangleComponent>;
+  let triangleServiceSpy: jasmine.SpyObj<TriangleService>;
 
   beforeEach(async () => {
+    const spy = jasmine.createSpyObj('TriangleService', ['getTriangles']);
+    
     await TestBed.configureTestingModule({
-      imports: [TriangleComponent],
+      imports: [TriangleComponent, HttpClientTestingModule],
+      providers: [{ provide: TriangleService, useValue: spy }],
       schemas: [NO_ERRORS_SCHEMA] // To handle image loading without errors
     })
     .compileComponents();
+
+    triangleServiceSpy = TestBed.inject(TriangleService) as jasmine.SpyObj<TriangleService>;
+    triangleServiceSpy.getTriangles.and.returnValue(of({
+      success: true,
+      count: 2,
+      data: [
+        {
+          _id: '1',
+          sideA: 3,
+          sideB: 4,
+          sideC: 5,
+          __v: 0,
+          createdAt: '2025-05-21T01:02:18.157Z',
+          updatedAt: '2025-05-21T01:02:18.157Z'
+        },
+        {
+          _id: '2',
+          sideA: 5,
+          sideB: 5,
+          sideC: 5,
+          __v: 0,
+          createdAt: '2025-05-21T01:02:18.157Z',
+          updatedAt: '2025-05-21T01:02:18.157Z'
+        }
+      ]
+    }));
 
     fixture = TestBed.createComponent(TriangleComponent);
     component = fixture.componentInstance;
