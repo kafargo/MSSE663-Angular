@@ -42,69 +42,12 @@
       class="practice-triangles"
     >
       <div class="practice-triangles-grid">
-        <div
+        <app-triangle-problem
           *ngFor="let triangle of practiceTriangles"
-          class="practice-triangle-card"
-        >
-          <h4>Triangle</h4>
-          <div class="triangle-sides">
-            <p><strong>Side A:</strong> {{ triangle.sideA }}</p>
-            <p><strong>Side B:</strong> {{ triangle.sideB }}</p>
-            <p><strong>Side C:</strong> {{ triangle.sideC }}</p>
-          </div>
-
-          <div class="practice-answers">
-            <div class="answer-group">
-              <label for="perimeter-{{ triangle._id }}">Perimeter:</label>
-              <input
-                type="number"
-                id="perimeter-{{ triangle._id }}"
-                [(ngModel)]="triangle.userPerimeter"
-                (input)="checkAnswer(triangle, 'perimeter')"
-                [ngClass]="{
-                  correct: triangle.isPerimeterCorrect === true,
-                  incorrect: triangle.isPerimeterCorrect === false
-                }"
-                step="0.01"
-              />
-            </div>
-
-            <div class="answer-group">
-              <label for="area-{{ triangle._id }}">Area:</label>
-              <input
-                type="number"
-                id="area-{{ triangle._id }}"
-                [(ngModel)]="triangle.userArea"
-                (input)="checkAnswer(triangle, 'area')"
-                [ngClass]="{
-                  correct: triangle.isAreaCorrect === true,
-                  incorrect: triangle.isAreaCorrect === false
-                }"
-                step="0.01"
-              />
-            </div>
-
-            <div class="answer-group">
-              <label for="type-{{ triangle._id }}">Type:</label>
-              <select
-                id="type-{{ triangle._id }}"
-                [(ngModel)]="triangle.userType"
-                (change)="checkAnswer(triangle, 'type')"
-                [ngClass]="{
-                  correct: triangle.isTypeCorrect === true,
-                  incorrect: triangle.isTypeCorrect === false
-                }"
-              >
-                <option [ngValue]="undefined" disabled selected>
-                  Select type
-                </option>
-                <option *ngFor="let type of triangleTypes" [value]="type">
-                  {{ type }}
-                </option>
-              </select>
-            </div>
-          </div>
-        </div>
+          [problem]="triangle"
+          [triangleTypes]="triangleTypes"
+          (submitAnswer)="handleSubmitAnswer($event)"
+        ></app-triangle-problem>
       </div>
 
       <div class="practice-controls">

@@ -1,0 +1,72 @@
+<form [formGroup]="triangleForm" (ngSubmit)="onSubmit()" class="triangle-form">
+  <div class="form-group">
+    <label for="perimeter-{{ uniqueId }}">Perimeter:</label>
+    <div class="input-container">
+      <input
+        type="number"
+        id="perimeter-{{ uniqueId }}"
+        formControlName="perimeter"
+        [class.error]="perimeterControl?.invalid && perimeterControl?.touched"
+        step="0.01"
+      />
+      <div
+        class="validation-error"
+        *ngIf="perimeterControl?.invalid && perimeterControl?.touched"
+      >
+        <span *ngIf="perimeterControl?.errors?.['required']"
+          >Perimeter is required</span
+        >
+        <span *ngIf="perimeterControl?.errors?.['min']"
+          >Perimeter must be positive</span
+        >
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="area-{{ uniqueId }}">Area:</label>
+    <div class="input-container">
+      <input
+        type="number"
+        id="area-{{ uniqueId }}"
+        formControlName="area"
+        [class.error]="areaControl?.invalid && areaControl?.touched"
+        step="0.01"
+      />
+      <div
+        class="validation-error"
+        *ngIf="areaControl?.invalid && areaControl?.touched"
+      >
+        <span *ngIf="areaControl?.errors?.['required']">Area is required</span>
+        <span *ngIf="areaControl?.errors?.['min']">Area must be positive</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Triangle Type:</label>
+    <div class="radio-group">
+      <div class="radio-option" *ngFor="let type of triangleTypes">
+        <input
+          type="radio"
+          [id]="'type-' + type + '-' + uniqueId"
+          [value]="type"
+          formControlName="type"
+        />
+        <label [for]="'type-' + type + '-' + uniqueId">{{ type }}</label>
+      </div>
+      <div
+        class="validation-error"
+        *ngIf="typeControl?.invalid && typeControl?.touched"
+      >
+        <span *ngIf="typeControl?.errors?.['required']">Type is required</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="submit-button">
+      {{ problem.submitted ? "Update Answers" : "Submit Answers" }}
+    </button>
+  </div>
+</form>

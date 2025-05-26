@@ -1,32 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { TriangleService } from '../../../services/triangle.service';
 import { Triangle } from '../../../models/triangle.model';
-
-interface PracticeTriangle extends Triangle {
-  perimeter?: number;
-  area?: number;
-  type?: string;
-  userPerimeter?: number;
-  userArea?: number;
-  userType?: string;
-  isPerimeterCorrect?: boolean | null;
-  isAreaCorrect?: boolean | null;
-  isTypeCorrect?: boolean | null;
-  [key: string]: any; // Allow dynamic property access
-}
+import { TriangleProblem, TriangleFormData } from '../../../models/triangle-problem.model';
+import { TriangleProblemComponent } from './triangle-problem/triangle-problem.component';
 
 @Component({
   selector: 'app-triangle',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TriangleProblemComponent],
   templateUrl: './triangle.component.html',
   styleUrl: './triangle.component.scss'
 })
 export class TriangleComponent implements OnInit {
   triangles: Triangle[] = [];
-  practiceTriangles: PracticeTriangle[] = [];
+  practiceTriangles: TriangleProblem[] = [];
   loading = false;
   error: string | null = null;
   triangleTypes = ['Equilateral', 'Isosceles', 'Scalene'];
@@ -70,18 +59,22 @@ export class TriangleComponent implements OnInit {
     }
     
     // Take the first 4 triangles and calculate their properties
-    this.practiceTriangles = trianglesCopy.slice(0, 4).map(triangle => {
-      const practiceTriangle: PracticeTriangle = { ...triangle };
-      
-      // Pre-calculate correct answers
-      practiceTriangle.perimeter = this.calculatePerimeter(triangle);
-      practiceTriangle.area = this.calculateArea(triangle);
-      practiceTriangle.type = this.determineTriangleType(triangle);
-
-      // Initialize user answers as null
-      practiceTriangle.isPerimeterCorrect = null;
-      practiceTriangle.isAreaCorrect = null;
-      practiceTriangle.isTypeCorrect = null;
+    this.practiceTriangles = trianglesCopy.slice(0, 6).map(triangle => {
+      const practiceTriangle = { 
+        ...triangle,
+        // Pre-calculate correct answers
+        perimeter: this.calculatePerimeter(triangle),
+        area: this.calculateArea(triangle),
+        type: this.determineTriangleType(triangle),
+        
+        // Set submission status to false
+        submitted: false,
+        
+        // Initialize feedback as null
+        isPerimeterCorrect: null,
+        isAreaCorrect: null,
+        isTypeCorrect: null
+      };
       
       return practiceTriangle;
     });
@@ -109,20 +102,33 @@ export class TriangleComponent implements OnInit {
     }
   }
 
-  checkAnswer(triangle: PracticeTriangle, property: 'perimeter' | 'area' | 'type'): void {
-    const userAnswer = triangle[`user${property.charAt(0).toUpperCase() + property.slice(1)}`];
-    const correctAnswer = triangle[property];
+  handleSubmitAnswer(event: {problem: TriangleProblem, formData: TriangleFormData}): void {
+    const { problem, formData } = event;
     
+    // Mark as submitted
+    problem.submitted = true;
+    
+    // Check answers
+    this.checkAnswer(problem, formData);
+  }
+
+  checkAnswer(problem: TriangleProblem, formData: TriangleFormData): void {
     // For perimeter and area, we'll allow a small margin of error (0.1)
-    if (property === 'perimeter' || property === 'area') {
-      const userValueNum = Number(userAnswer);
-      const correctValueNum = Number(correctAnswer);
-      triangle[`is${property.charAt(0).toUpperCase() + property.slice(1)}Correct`] = 
-        !isNaN(userValueNum) && Math.abs(userValueNum - correctValueNum) < 0.1;
-    } else {
-      // For triangle type, exact match is required
-      triangle[`is${property.charAt(0).toUpperCase() + property.slice(1)}Correct`] = 
-        userAnswer === correctAnswer;
+    if (formData.perimeter !== null) {
+      const userPerimeter = Number(formData.perimeter);
+      problem.isPerimeterCorrect = !isNaN(userPerimeter) && 
+                                   Math.abs(userPerimeter - problem.perimeter) < 0.1;
+    }
+    
+    if (formData.area !== null) {
+      const userArea = Number(formData.area);
+      problem.isAreaCorrect = !isNaN(userArea) && 
+                             Math.abs(userArea - problem.area) < 0.1;
+    }
+    
+    // For triangle type, exact match is required
+    if (formData.type !== null) {
+      problem.isTypeCorrect = formData.type === problem.type;
     }
   }
 

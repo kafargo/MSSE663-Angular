@@ -1,0 +1,101 @@
+.triangle-problem {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.problem-header {
+  h4 {
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+    color: #2c3e50;
+  }
+
+  .triangle-sides {
+    margin-bottom: 8px;
+
+    p {
+      margin: 4px 0;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.visualization-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.results-container {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+  
+  h5 {
+    margin-bottom: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4a5568;
+  }
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #edf2f7;
+  
+  &.correct {
+    background-color: rgba(72, 187, 120, 0.1);
+  }
+  
+  &.incorrect {
+    background-color: rgba(245, 101, 101, 0.1);
+  }
+  
+  .result-label {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #4a5568;
+  }
+  
+  .result-feedback {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    .result-value {
+      font-size: 0.9rem;
+    }
+    
+    .result-icon {
+      font-weight: bold;
+      
+      &:first-child {
+        color: #48bb78; // green for correct
+      }
+      
+      &:last-child {
+        color: #f56565; // red for incorrect
+      }
+    }
+  }
+}
+
+// Last result item should have no border
+.result-item:last-child {
+  border-bottom: none;
+}

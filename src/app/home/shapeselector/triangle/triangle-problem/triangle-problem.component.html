@@ -1,0 +1,71 @@
+<div class="triangle-problem">
+  <div class="problem-header">
+    <h4>Triangle</h4>
+    <div class="triangle-sides">
+      <p><strong>Side A:</strong> {{ problem.sideA }}</p>
+      <p><strong>Side B:</strong> {{ problem.sideB }}</p>
+      <p><strong>Side C:</strong> {{ problem.sideC }}</p>
+    </div>
+  </div>
+
+  <div class="visualization-container">
+    <app-triangle-visualization
+      [triangle]="problem"
+    ></app-triangle-visualization>
+  </div>
+
+  <app-triangle-form
+    [problem]="problem"
+    [triangleTypes]="triangleTypes"
+    (formSubmit)="onFormSubmit($event)"
+  ></app-triangle-form>
+
+  <!-- Results section shown only after submission -->
+  <div class="results-container" *ngIf="problem.submitted">
+    <h5>Results</h5>
+    <div
+      class="result-item"
+      [class.correct]="problem.isPerimeterCorrect"
+      [class.incorrect]="problem.isPerimeterCorrect === false"
+    >
+      <span class="result-label">Perimeter:</span>
+      <div class="result-feedback">
+        <span class="result-value">{{ problem.perimeter }}</span>
+        <span class="result-icon" *ngIf="problem.isPerimeterCorrect">✓</span>
+        <span class="result-icon" *ngIf="problem.isPerimeterCorrect === false"
+          >✗</span
+        >
+      </div>
+    </div>
+
+    <div
+      class="result-item"
+      [class.correct]="problem.isAreaCorrect"
+      [class.incorrect]="problem.isAreaCorrect === false"
+    >
+      <span class="result-label">Area:</span>
+      <div class="result-feedback">
+        <span class="result-value">{{ problem.area }}</span>
+        <span class="result-icon" *ngIf="problem.isAreaCorrect">✓</span>
+        <span class="result-icon" *ngIf="problem.isAreaCorrect === false"
+          >✗</span
+        >
+      </div>
+    </div>
+
+    <div
+      class="result-item"
+      [class.correct]="problem.isTypeCorrect"
+      [class.incorrect]="problem.isTypeCorrect === false"
+    >
+      <span class="result-label">Type:</span>
+      <div class="result-feedback">
+        <span class="result-value">{{ problem.type }}</span>
+        <span class="result-icon" *ngIf="problem.isTypeCorrect">✓</span>
+        <span class="result-icon" *ngIf="problem.isTypeCorrect === false"
+          >✗</span
+        >
+      </div>
+    </div>
+  </div>
+</div>

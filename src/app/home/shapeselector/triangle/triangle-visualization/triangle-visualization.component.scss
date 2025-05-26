@@ -1,0 +1,40 @@
+.canvas-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+canvas {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Add responsive rules for different screen sizes */
+@media (max-width: 768px) {
+  .canvas-container {
+    padding: 5px;
+  }
+  
+  canvas {
+    max-width: 250px;
+    height: auto;
+  }
+}
+
+@media (max-width: 576px) {
+  canvas {
+    max-width: 220px;
+    height: auto;
+  }
+  
+  .side-label {
+    font-size: 10px;
+  }
+}
