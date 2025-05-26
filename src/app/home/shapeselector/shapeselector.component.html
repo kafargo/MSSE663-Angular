@@ -4,12 +4,18 @@
     <h2>Select a Shape</h2>
     <div class="button-container">
       <button class="shape-button" (click)="selectShape('circle')">
-        <img src="assets/circle.svg" alt="Circle" />
-        <span>Circle</span>
+        <div class="shape-button-content">
+          <img src="assets/circle.svg" alt="Circle" />
+          <span>Circle</span>
+          <img class="wip-tag" src="assets/work-in-progress.svg" alt="Work in Progress" />
+        </div>
       </button>
       <button class="shape-button" (click)="selectShape('square')">
-        <img src="assets/square.svg" alt="Square" />
-        <span>Square</span>
+        <div class="shape-button-content">
+          <img src="assets/square.svg" alt="Square" />
+          <span>Square</span>
+          <img class="wip-tag" src="assets/work-in-progress.svg" alt="Work in Progress" />
+        </div>
       </button>
       <button class="shape-button" (click)="selectShape('triangle')">
         <img src="assets/triangle.svg" alt="Triangle" />

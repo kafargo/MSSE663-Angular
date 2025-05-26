@@ -36,6 +36,7 @@
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
+  position: relative;
   
   &:hover {
     transform: translateY(-5px);
@@ -43,10 +44,27 @@
     border-color: #2980b9;
   }
   
+  .shape-button-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+  
   img {
     width: 80px;
     height: 80px;
     margin-bottom: 12px;
+  }
+  
+  .wip-tag {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 50px;
+    height: 50px;
+    margin: 0;
+    z-index: 1;
   }
   
   span {
