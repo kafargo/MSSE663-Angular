@@ -79,4 +79,114 @@ describe('TriangleComponent', () => {
     expect(content).toContain('Perimeter = sum of all three sides');
     expect(content).toContain('Sum of interior angles = 180°');
   });
+
+  it('should handle form data change correctly', () => {
+    const mockFormData = { perimeter: 12, area: 6, type: 'Scalene' };
+    
+    // Setup a mock practice triangle
+    component.practiceTriangles = [{
+      _id: '1',
+      sideA: 3, sideB: 4, sideC: 5,
+      perimeter: 12, area: 6, type: 'Scalene',
+      submitted: false,
+      isPerimeterCorrect: null, isAreaCorrect: null, isTypeCorrect: null,
+      __v: 0, createdAt: '', updatedAt: ''
+    }];
+    
+    component.formDataByIndex = [null];
+    
+    const mockEvent = { 
+      problem: component.practiceTriangles[0], 
+      formData: mockFormData 
+    };
+    
+    component.handleFormDataChange(mockEvent, 0);
+    
+    expect(component.formDataByIndex[0]).toEqual(mockFormData);
+  });
+  
+  it('should submit all answers correctly when forms are valid', () => {
+    // Setup multiple triangles with form data
+    component.practiceTriangles = [
+      {
+        _id: '1',
+        sideA: 3, sideB: 4, sideC: 5,
+        perimeter: 12, area: 6, type: 'Scalene',
+        submitted: false,
+        isPerimeterCorrect: null, isAreaCorrect: null, isTypeCorrect: null,
+        __v: 0, createdAt: '', updatedAt: ''
+      },
+      {
+        _id: '2',
+        sideA: 5, sideB: 5, sideC: 5,
+        perimeter: 15, area: 10.8, type: 'Equilateral',
+        submitted: false,
+        isPerimeterCorrect: null, isAreaCorrect: null, isTypeCorrect: null,
+        __v: 0, createdAt: '', updatedAt: ''
+      }
+    ];
+    
+    component.formDataByIndex = [
+      { perimeter: 12, area: 6, type: 'Scalene' },
+      { perimeter: 15, area: 10.8, type: 'Equilateral' }
+    ];
+    
+    // Mock the triangleProblemComponents QueryList
+    const mockComponents = [
+      { validateForm: () => true },
+      { validateForm: () => true }
+    ];
+    
+    component.triangleProblemComponents = {
+      forEach: (callbackFn: (value: any, index: number) => void) => {
+        mockComponents.forEach((comp, i) => callbackFn(comp, i));
+      }
+    } as any;
+    
+    component.submitAllAnswers();
+    
+    expect(component.practiceTriangles[0].submitted).toBe(true);
+    expect(component.practiceTriangles[1].submitted).toBe(true);
+    expect(component.hasAnySubmitted).toBe(true);
+    
+    // Check that perimeter is correct for first triangle
+    expect(component.practiceTriangles[0].isPerimeterCorrect).toBe(true);
+  });
+  
+  it('should not submit if any form is invalid', () => {
+    // Setup with one invalid form
+    const mockComponents = [
+      { validateForm: () => true },
+      { validateForm: () => false }
+    ];
+    
+    component.triangleProblemComponents = {
+      forEach: (callbackFn: (value: any, index: number) => void) => {
+        mockComponents.forEach((comp, i) => callbackFn(comp, i));
+      }
+    } as any;
+    
+    component.submitAllAnswers();
+    
+    expect(component.hasAnySubmitted).toBe(false);
+  });
+  
+  it('should show practice controls when triangles are loaded', () => {
+    // Setup practice triangles
+    component.practiceTriangles = [{
+      _id: '1',
+      sideA: 3, sideB: 4, sideC: 5,
+      perimeter: 12, area: 6, type: 'Scalene',
+      submitted: false,
+      isPerimeterCorrect: null, isAreaCorrect: null, isTypeCorrect: null,
+      __v: 0, createdAt: '', updatedAt: ''
+    }];
+    component.loading = false;
+    component.error = null;
+    
+    fixture.detectChanges();
+    
+    const practiceControls = fixture.debugElement.query(By.css('.practice-controls'));
+    expect(practiceControls).toBeTruthy();
+  });
 });

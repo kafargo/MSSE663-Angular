@@ -50,8 +50,8 @@ describe('TriangleProblemComponent', () => {
     expect(component.triangleTypes.length).toBe(3);
   });
 
-  it('should emit submitAnswer when onFormSubmit is called', () => {
-    spyOn(component.submitAnswer, 'emit');
+  it('should emit formDataChange when onFormDataChange is called', () => {
+    spyOn(component.formDataChange, 'emit');
     
     const mockFormData: TriangleFormData = {
       perimeter: 12,
@@ -60,9 +60,10 @@ describe('TriangleProblemComponent', () => {
     };
 
     const event = { problem: mockProblem, formData: mockFormData };
-    component.onFormSubmit(event);
+    component.onFormDataChange(event);
 
-    expect(component.submitAnswer.emit).toHaveBeenCalledWith(event);
+    expect(component.formDataChange.emit).toHaveBeenCalledWith(event);
+    expect(component.currentFormData).toEqual(mockFormData);
   });
 
   it('should initialize without errors', () => {
@@ -93,5 +94,36 @@ describe('TriangleProblemComponent', () => {
     expect(component.problem.type).toBe('Equilateral');
     expect(component.problem.submitted).toBe(true);
     expect(component.problem.isPerimeterCorrect).toBe(true);
+  });
+
+  it('should handle validateForm method', () => {
+    // Mock the triangleForm component
+    component.triangleForm = jasmine.createSpyObj('TriangleFormComponent', ['validateForm']);
+    (component.triangleForm as any).validateForm.and.returnValue(true);
+    
+    const result = component.validateForm();
+    
+    expect(result).toBe(true);
+    expect(component.triangleForm.validateForm).toHaveBeenCalled();
+  });
+  
+  it('should return false for validateForm when form is not available', () => {
+    component.triangleForm = undefined as any;
+    
+    const result = component.validateForm();
+    
+    expect(result).toBe(false);
+  });
+  
+  it('should return current form data', () => {
+    const mockFormData: TriangleFormData = {
+      perimeter: 12,
+      area: 6,
+      type: 'Scalene'
+    };
+    
+    component.currentFormData = mockFormData;
+    
+    expect(component.getFormData()).toEqual(mockFormData);
   });
 });

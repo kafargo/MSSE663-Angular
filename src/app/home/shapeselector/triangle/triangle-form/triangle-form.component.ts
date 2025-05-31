@@ -13,7 +13,7 @@ import { TriangleProblem, TriangleFormData } from '../../../../models/triangle-p
 export class TriangleFormComponent implements OnInit {
   @Input() problem!: TriangleProblem;
   @Input() triangleTypes: string[] = [];
-  @Output() formSubmit = new EventEmitter<{problem: TriangleProblem, formData: TriangleFormData}>();
+  @Output() formDataChange = new EventEmitter<{problem: TriangleProblem, formData: TriangleFormData}>();
   
   triangleForm!: FormGroup;
   uniqueId: string = 'form-' + Math.random().toString(36).substring(2, 9);
@@ -38,19 +38,28 @@ export class TriangleFormComponent implements OnInit {
     }
   }
   
-  onSubmit(): void {
+  onFieldChange(): void {
+    // Emit current form data when any field changes
+    const formData: TriangleFormData = this.triangleForm.value;
+    this.formDataChange.emit({problem: this.problem, formData});
+  }
+  
+  // Method to validate form without submitting
+  validateForm(): boolean {
     if (this.triangleForm.invalid) {
       // Mark all fields as touched to show validation errors
       Object.keys(this.triangleForm.controls).forEach(key => {
         const control = this.triangleForm.get(key);
         control?.markAsTouched();
       });
-      return;
+      return false;
     }
-    
-    // Emit the form data for evaluation
-    const formData: TriangleFormData = this.triangleForm.value;
-    this.formSubmit.emit({problem: this.problem, formData});
+    return true;
+  }
+  
+  // Get current form data
+  getFormData(): TriangleFormData | null {
+    return this.triangleForm.valid ? this.triangleForm.value : null;
   }
   
   // Helper methods for template

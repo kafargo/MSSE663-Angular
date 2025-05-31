@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TriangleService } from '../../../services/triangle.service';
@@ -14,11 +14,15 @@ import { TriangleProblemComponent } from './triangle-problem/triangle-problem.co
   styleUrl: './triangle.component.scss'
 })
 export class TriangleComponent implements OnInit {
+  @ViewChildren(TriangleProblemComponent) triangleProblemComponents!: QueryList<TriangleProblemComponent>;
+  
   triangles: Triangle[] = [];
   practiceTriangles: TriangleProblem[] = [];
+  formDataByIndex: (TriangleFormData | null)[] = [];
   loading = false;
   error: string | null = null;
   triangleTypes = ['Equilateral', 'Isosceles', 'Scalene'];
+  hasAnySubmitted = false;
 
   constructor(private triangleService: TriangleService) {}
 
@@ -78,6 +82,10 @@ export class TriangleComponent implements OnInit {
       
       return practiceTriangle;
     });
+    
+    // Reset form data array to match the number of practice triangles
+    this.formDataByIndex = new Array(this.practiceTriangles.length).fill(null);
+    this.hasAnySubmitted = false;
   }
 
   calculatePerimeter(triangle: Triangle): number {
@@ -102,15 +110,7 @@ export class TriangleComponent implements OnInit {
     }
   }
 
-  handleSubmitAnswer(event: {problem: TriangleProblem, formData: TriangleFormData}): void {
-    const { problem, formData } = event;
-    
-    // Mark as submitted
-    problem.submitted = true;
-    
-    // Check answers
-    this.checkAnswer(problem, formData);
-  }
+  // handleSubmitAnswer method replaced by submitAllAnswers
 
   checkAnswer(problem: TriangleProblem, formData: TriangleFormData): void {
     // For perimeter and area, we'll allow a small margin of error (0.1)
@@ -130,6 +130,43 @@ export class TriangleComponent implements OnInit {
     if (formData.type !== null) {
       problem.isTypeCorrect = formData.type === problem.type;
     }
+  }
+
+  handleFormDataChange(event: {problem: TriangleProblem, formData: TriangleFormData}, index: number): void {
+    // Update the stored form data for this triangle
+    this.formDataByIndex[index] = event.formData;
+  }
+  
+  submitAllAnswers(): void {
+    if (!this.triangleProblemComponents) {
+      return;
+    }
+    
+    // First validate all forms
+    let allValid = true;
+    this.triangleProblemComponents.forEach(component => {
+      if (!component.validateForm()) {
+        allValid = false;
+      }
+    });
+    
+    if (!allValid) {
+      return;
+    }
+    
+    // Submit all answers
+    this.practiceTriangles.forEach((problem, index) => {
+      const formData = this.formDataByIndex[index];
+      if (formData) {
+        // Mark as submitted
+        problem.submitted = true;
+        
+        // Check answers
+        this.checkAnswer(problem, formData);
+      }
+    });
+    
+    this.hasAnySubmitted = true;
   }
 
   getNewPracticeSet(): void {
