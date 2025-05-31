@@ -1,4 +1,4 @@
-<form [formGroup]="triangleForm" (ngSubmit)="onSubmit()" class="triangle-form">
+<form [formGroup]="triangleForm" class="triangle-form">
   <div class="form-group">
     <label for="perimeter-{{ uniqueId }}">Perimeter:</label>
     <div class="input-container">
@@ -8,6 +8,7 @@
         formControlName="perimeter"
         [class.error]="perimeterControl?.invalid && perimeterControl?.touched"
         step="0.01"
+        (blur)="onFieldChange()"
       />
       <div
         class="validation-error"
@@ -32,6 +33,7 @@
         formControlName="area"
         [class.error]="areaControl?.invalid && areaControl?.touched"
         step="0.01"
+        (blur)="onFieldChange()"
       />
       <div
         class="validation-error"
@@ -52,6 +54,7 @@
           [id]="'type-' + type + '-' + uniqueId"
           [value]="type"
           formControlName="type"
+          (change)="onFieldChange()"
         />
         <label [for]="'type-' + type + '-' + uniqueId">{{ type }}</label>
       </div>
@@ -62,11 +65,5 @@
         <span *ngIf="typeControl?.errors?.['required']">Type is required</span>
       </div>
     </div>
-  </div>
-
-  <div class="form-actions">
-    <button type="submit" class="submit-button">
-      {{ problem.submitted ? "Update Answers" : "Submit Answers" }}
-    </button>
   </div>
 </form>

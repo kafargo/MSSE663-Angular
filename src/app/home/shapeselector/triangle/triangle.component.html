@@ -43,14 +43,17 @@
     >
       <div class="practice-triangles-grid">
         <app-triangle-problem
-          *ngFor="let triangle of practiceTriangles"
+          *ngFor="let triangle of practiceTriangles; let i = index"
           [problem]="triangle"
           [triangleTypes]="triangleTypes"
-          (submitAnswer)="handleSubmitAnswer($event)"
+          (formDataChange)="handleFormDataChange($event, i)"
         ></app-triangle-problem>
       </div>
 
       <div class="practice-controls">
+        <button (click)="submitAllAnswers()" class="submit-all-button">
+          {{ hasAnySubmitted ? "Update All Answers" : "Submit All Answers" }}
+        </button>
         <button (click)="getNewPracticeSet()" class="new-practice-set-button">
           Get New Practice Set
         </button>

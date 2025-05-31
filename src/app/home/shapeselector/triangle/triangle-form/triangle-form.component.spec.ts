@@ -90,18 +90,24 @@ describe('TriangleFormComponent', () => {
     expect(component.triangleForm.valid).toBe(true);
   });
 
-  it('should not submit if form is invalid', () => {
-    spyOn(component.formSubmit, 'emit');
+  it('should validate form correctly', () => {
     component.ngOnInit();
     
     // Form is invalid by default (empty values)
-    component.onSubmit();
+    expect(component.validateForm()).toBe(false);
     
-    expect(component.formSubmit.emit).not.toHaveBeenCalled();
+    // Make the form valid
+    component.triangleForm.patchValue({
+      perimeter: 12,
+      area: 6,
+      type: 'Scalene'
+    });
+    
+    expect(component.validateForm()).toBe(true);
   });
 
-  it('should emit formSubmit when form is valid and submitted', () => {
-    spyOn(component.formSubmit, 'emit');
+  it('should emit formDataChange when onFieldChange is called', () => {
+    spyOn(component.formDataChange, 'emit');
     component.ngOnInit();
     
     const formData = {
@@ -111,15 +117,15 @@ describe('TriangleFormComponent', () => {
     };
     
     component.triangleForm.patchValue(formData);
-    component.onSubmit();
+    component.onFieldChange();
     
-    expect(component.formSubmit.emit).toHaveBeenCalledWith({
+    expect(component.formDataChange.emit).toHaveBeenCalledWith({
       problem: mockProblem,
       formData: formData
     });
   });
 
-  it('should mark all controls as touched when form is invalid on submit', () => {
+  it('should mark all controls as touched when validateForm called on invalid form', () => {
     component.ngOnInit();
     
     // Mock the markAsTouched method
@@ -131,7 +137,7 @@ describe('TriangleFormComponent', () => {
     spyOn(areaControl!, 'markAsTouched');
     spyOn(typeControl!, 'markAsTouched');
     
-    component.onSubmit();
+    component.validateForm();
     
     expect(perimeterControl!.markAsTouched).toHaveBeenCalled();
     expect(areaControl!.markAsTouched).toHaveBeenCalled();
@@ -165,5 +171,25 @@ describe('TriangleFormComponent', () => {
     expect(component.triangleForm.get('perimeter')?.value).toBeNull();
     expect(component.triangleForm.get('area')?.value).toBeNull();
     expect(component.triangleForm.get('type')?.value).toBeNull();
+  });
+
+  it('should return form data when form is valid', () => {
+    component.ngOnInit();
+    
+    const formData = {
+      perimeter: 12,
+      area: 6,
+      type: 'Scalene'
+    };
+    
+    component.triangleForm.patchValue(formData);
+    
+    expect(component.getFormData()).toEqual(formData);
+  });
+  
+  it('should return null when form is invalid', () => {
+    component.ngOnInit();
+    // Form is invalid by default (empty values)
+    expect(component.getFormData()).toBeNull();
   });
 });
