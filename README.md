@@ -61,3 +61,33 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+# Application Deployment
+
+## ⚙️ Build & Deployment Overview
+
+This Angular application is built and deployed using Railway with Nixpacks as the build system. The deployment is configured for the us-west1 region and leverages a containerized environment for consistency and portability.
+
+## 🧱 Build Process
+
+Railway uses Nixpacks v1.38.0 to automatically detect and configure the build environment. Here's how the process works:
+
+## Environment Setup
+
+Base image: ghcr.io/railwayapp/nixpacks:ubuntu-1745885067
+Node.js 20 and NPM 9 are installed via Nixpacks.
+The working directory is set to /app.
+
+## Dependency Installation
+
+Dependencies are installed using npm ci for a clean and reproducible install.
+Caching is enabled for both node_modules and the NPM cache to speed up subsequent builds.
+
+## Build Command
+
+The Angular application is built using npm run build, which internally runs ng build.
+The build output includes optimized JavaScript and CSS bundles, with lazy loading support for components.
+
+## Start Command
+
+The application is started using npm run start, which typically launches a development or production server depending on your configuration.
