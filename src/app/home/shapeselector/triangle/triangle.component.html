@@ -20,14 +20,28 @@
   <div class="practice-section">
     <h3>Triangle Practice</h3>
     <p>
-      Practice calculating triangle properties with these 4 random triangles:
+      Practice calculating triangle properties with these 6 random triangles:
     </p>
 
-    <div *ngIf="loading" class="loading-spinner">Loading triangles...</div>
+    <div
+      *ngIf="loading"
+      class="loading-spinner"
+      role="status"
+      aria-live="polite"
+    >
+      <span aria-hidden="true">Loading triangles...</span>
+      <span class="sr-only">Loading triangles. Please wait.</span>
+    </div>
 
-    <div *ngIf="error" class="error-message">
+    <div *ngIf="error" class="error-message" role="alert" aria-live="assertive">
       {{ error }}
-      <button (click)="fetchTriangles()" class="retry-button">Try Again</button>
+      <button
+        (click)="fetchTriangles()"
+        class="retry-button"
+        aria-label="Try loading triangles again"
+      >
+        Try Again
+      </button>
     </div>
 
     <div
@@ -50,13 +64,61 @@
         ></app-triangle-problem>
       </div>
 
-      <div class="practice-controls">
-        <button (click)="submitAllAnswers()" class="submit-all-button">
+      <div class="practice-controls" aria-live="polite">
+        <button
+          (click)="submitAllAnswers()"
+          class="submit-all-button"
+          [attr.aria-label]="
+            hasAnySubmitted
+              ? 'Update all triangle answers'
+              : 'Submit all triangle answers'
+          "
+        >
           {{ hasAnySubmitted ? "Update All Answers" : "Submit All Answers" }}
         </button>
-        <button (click)="getNewPracticeSet()" class="new-practice-set-button">
+        <button
+          (click)="getNewPracticeSet()"
+          class="new-practice-set-button"
+          aria-label="Generate a new set of practice triangles"
+        >
           Get New Practice Set
         </button>
+        <button
+          (click)="showAnswers()"
+          class="cheat-button"
+          aria-label="Show the correct answers for all triangles"
+        >
+          Cheat
+        </button>
+      </div>
+
+      <!-- Celebration animation that appears when all answers are correct -->
+      <div
+        class="celebration-container"
+        *ngIf="showCelebration"
+        aria-hidden="true"
+      >
+        <div
+          class="celebration-animation"
+          role="img"
+          aria-label="Celebration animation for correct answers"
+        >
+          <div class="confetti-piece"></div>
+          <div class="confetti-piece"></div>
+          <div class="confetti-piece"></div>
+          <div class="confetti-piece"></div>
+          <div class="confetti-piece"></div>
+          <div class="confetti-piece"></div>
+          <div class="confetti-piece"></div>
+          <div class="confetti-piece"></div>
+          <div class="confetti-piece"></div>
+          <div class="confetti-piece"></div>
+          <div class="confetti-piece"></div>
+          <div class="confetti-piece"></div>
+        </div>
+        <p class="celebration-message">
+          Great job! All your answers are correct!
+        </p>
       </div>
     </div>
   </div>
