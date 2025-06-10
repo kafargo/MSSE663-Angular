@@ -9,10 +9,22 @@
         [class.error]="perimeterControl?.invalid && perimeterControl?.touched"
         step="0.01"
         (blur)="onFieldChange()"
+        [attr.aria-invalid]="
+          perimeterControl?.invalid && perimeterControl?.touched
+        "
+        [attr.aria-describedby]="
+          perimeterControl?.invalid && perimeterControl?.touched
+            ? 'perimeter-error-' + uniqueId
+            : null
+        "
+        aria-required="true"
       />
       <div
         class="validation-error"
+        [id]="'perimeter-error-' + uniqueId"
         *ngIf="perimeterControl?.invalid && perimeterControl?.touched"
+        role="alert"
+        aria-live="assertive"
       >
         <span *ngIf="perimeterControl?.errors?.['required']"
           >Perimeter is required</span
@@ -34,10 +46,20 @@
         [class.error]="areaControl?.invalid && areaControl?.touched"
         step="0.01"
         (blur)="onFieldChange()"
+        [attr.aria-invalid]="areaControl?.invalid && areaControl?.touched"
+        [attr.aria-describedby]="
+          areaControl?.invalid && areaControl?.touched
+            ? 'area-error-' + uniqueId
+            : null
+        "
+        aria-required="true"
       />
       <div
         class="validation-error"
+        [id]="'area-error-' + uniqueId"
         *ngIf="areaControl?.invalid && areaControl?.touched"
+        role="alert"
+        aria-live="assertive"
       >
         <span *ngIf="areaControl?.errors?.['required']">Area is required</span>
         <span *ngIf="areaControl?.errors?.['min']">Area must be positive</span>
@@ -46,24 +68,36 @@
   </div>
 
   <div class="form-group">
-    <label>Triangle Type:</label>
-    <div class="radio-group">
-      <div class="radio-option" *ngFor="let type of triangleTypes">
-        <input
-          type="radio"
-          [id]="'type-' + type + '-' + uniqueId"
-          [value]="type"
-          formControlName="type"
-          (change)="onFieldChange()"
-        />
-        <label [for]="'type-' + type + '-' + uniqueId">{{ type }}</label>
+    <fieldset>
+      <legend>Triangle Type</legend>
+      <div class="radio-group" role="radiogroup" aria-required="true">
+        <div class="radio-option" *ngFor="let type of triangleTypes">
+          <input
+            type="radio"
+            [id]="'type-' + type + '-' + uniqueId"
+            [value]="type"
+            formControlName="type"
+            (change)="onFieldChange()"
+            [attr.aria-describedby]="
+              typeControl?.invalid && typeControl?.touched
+                ? 'type-error-' + uniqueId
+                : null
+            "
+          />
+          <label [for]="'type-' + type + '-' + uniqueId">{{ type }}</label>
+        </div>
+        <div
+          class="validation-error"
+          id="type-error-{{ uniqueId }}"
+          *ngIf="typeControl?.invalid && typeControl?.touched"
+          role="alert"
+          aria-live="assertive"
+        >
+          <span *ngIf="typeControl?.errors?.['required']"
+            >Type is required</span
+          >
+        </div>
       </div>
-      <div
-        class="validation-error"
-        *ngIf="typeControl?.invalid && typeControl?.touched"
-      >
-        <span *ngIf="typeControl?.errors?.['required']">Type is required</span>
-      </div>
-    </div>
+    </fieldset>
   </div>
 </form>

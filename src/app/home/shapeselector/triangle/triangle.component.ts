@@ -1,4 +1,4 @@
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TriangleService } from '../../../services/triangle.service';
@@ -13,7 +13,7 @@ import { TriangleProblemComponent } from './triangle-problem/triangle-problem.co
   templateUrl: './triangle.component.html',
   styleUrl: './triangle.component.scss'
 })
-export class TriangleComponent implements OnInit {
+export class TriangleComponent implements OnInit, OnDestroy {
   @ViewChildren(TriangleProblemComponent) triangleProblemComponents!: QueryList<TriangleProblemComponent>;
   
   triangles: Triangle[] = [];
@@ -23,11 +23,21 @@ export class TriangleComponent implements OnInit {
   error: string | null = null;
   triangleTypes = ['Equilateral', 'Isosceles', 'Scalene'];
   hasAnySubmitted = false;
+  showCelebration = false;
+  celebrationTimer: any = null;
 
   constructor(private triangleService: TriangleService) {}
 
   ngOnInit(): void {
     this.fetchTriangles();
+  }
+
+  ngOnDestroy(): void {
+    // Clean up the celebration timer if it's still running
+    if (this.celebrationTimer) {
+      clearTimeout(this.celebrationTimer);
+      this.celebrationTimer = null;
+    }
   }
 
   fetchTriangles(): void {
@@ -167,9 +177,88 @@ export class TriangleComponent implements OnInit {
     });
     
     this.hasAnySubmitted = true;
+    
+    // Check if all answers are correct and show celebration if they are
+    if (this.areAllAnswersCorrect()) {
+      this.showCelebration = true;
+      
+      // Hide celebration after 5 seconds
+      if (this.celebrationTimer) {
+        clearTimeout(this.celebrationTimer);
+      }
+      
+      this.celebrationTimer = setTimeout(() => {
+        this.showCelebration = false;
+      }, 5000);
+    } else {
+      this.showCelebration = false;
+    }
   }
 
   getNewPracticeSet(): void {
+    // Clear any existing celebration
+    this.showCelebration = false;
+    if (this.celebrationTimer) {
+      clearTimeout(this.celebrationTimer);
+      this.celebrationTimer = null;
+    }
     this.selectRandomTriangles();
+  }
+  
+  /**
+   * Check if all submitted answers are correct
+   */
+  areAllAnswersCorrect(): boolean {
+    if (!this.hasAnySubmitted || this.practiceTriangles.length === 0) {
+      return false;
+    }
+    
+    for (const problem of this.practiceTriangles) {
+      if (!problem.submitted || 
+          problem.isPerimeterCorrect !== true || 
+          problem.isAreaCorrect !== true || 
+          problem.isTypeCorrect !== true) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+
+  showAnswers(): void {
+    if (!this.triangleProblemComponents || this.practiceTriangles.length === 0) {
+      return;
+    }
+    
+    // Fill each form with the correct answers
+    this.triangleProblemComponents.forEach((component, index) => {
+      if (component.triangleForm && this.practiceTriangles[index]) {
+        const problem = this.practiceTriangles[index];
+        
+        // Set the form values to the correct answers
+        component.triangleForm.triangleForm.setValue({
+          perimeter: problem.perimeter,
+          area: problem.area,
+          type: problem.type
+        });
+        
+        // Update the stored form data
+        this.formDataByIndex[index] = {
+          perimeter: problem.perimeter,
+          area: problem.area,
+          type: problem.type
+        };
+        
+        // Trigger the form data change event to update the parent component
+        component.onFormDataChange({
+          problem: problem, 
+          formData: {
+            perimeter: problem.perimeter,
+            area: problem.area,
+            type: problem.type
+          }
+        });
+      }
+    });
   }
 }

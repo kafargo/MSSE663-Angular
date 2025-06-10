@@ -240,7 +240,7 @@
   gap: 16px;
   margin-top: 24px;
 
-  .new-practice-set-button, .submit-all-button {
+  .new-practice-set-button, .submit-all-button, .cheat-button {
     padding: 10px 16px;
     color: white;
     border: none;
@@ -265,10 +265,207 @@
   }
   
   .submit-all-button {
-    background-color: #38a169;
+    background-color: #2b6b49; /* Darker green for better contrast */
     
     &:hover {
-      background-color: #2f855a;
+      background-color: #1e523a;
     }
+  }
+  
+  .cheat-button {
+    background-color: #e74c3c; /* Red for the cheat button */
+    
+    &:hover {
+      background-color: #c0392b;
+    }
+  }
+}
+
+/* Celebration Animation Styles */
+.celebration-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  pointer-events: none;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.celebration-message {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 16px 32px;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2b6b49;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-top: 20px;
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.celebration-animation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 10px;
+  height: 30px;
+  background: #ffd300;
+  top: 0;
+  opacity: 0;
+}
+
+.confetti-piece:nth-child(1) {
+  left: 7%;
+  transform: rotate(-40deg);
+  animation: makeItRain 1000ms infinite ease-out;
+  animation-delay: 182ms;
+  animation-duration: 1116ms;
+}
+
+.confetti-piece:nth-child(2) {
+  left: 14%;
+  transform: rotate(4deg);
+  animation: makeItRain 1000ms infinite ease-out;
+  animation-delay: 161ms;
+  animation-duration: 1076ms;
+  background-color: #00d8ff;
+}
+
+.confetti-piece:nth-child(3) {
+  left: 21%;
+  transform: rotate(-51deg);
+  animation: makeItRain 1000ms infinite ease-out;
+  animation-delay: 481ms;
+  animation-duration: 1103ms;
+  background-color: #ff0000;
+}
+
+.confetti-piece:nth-child(4) {
+  left: 28%;
+  transform: rotate(61deg);
+  animation: makeItRain 1000ms infinite ease-out;
+  animation-delay: 334ms;
+  animation-duration: 708ms;
+  background-color: #a800ff;
+}
+
+.confetti-piece:nth-child(5) {
+  left: 35%;
+  transform: rotate(-52deg);
+  animation: makeItRain 1000ms infinite ease-out;
+  animation-delay: 302ms;
+  animation-duration: 666ms;
+  background-color: #00ff84;
+}
+
+.confetti-piece:nth-child(6) {
+  left: 42%;
+  transform: rotate(38deg);
+  animation: makeItRain 1000ms infinite ease-out;
+  animation-delay: 180ms;
+  animation-duration: 1168ms;
+  background-color: #ff7300;
+}
+
+.confetti-piece:nth-child(7) {
+  left: 49%;
+  transform: rotate(11deg);
+  animation: makeItRain 1000ms infinite ease-out;
+  animation-delay: 395ms;
+  animation-duration: 1200ms;
+  background-color: #ff00aa;
+}
+
+.confetti-piece:nth-child(8) {
+  left: 56%;
+  transform: rotate(49deg);
+  animation: makeItRain 1000ms infinite ease-out;
+  animation-delay: 14ms;
+  animation-duration: 887ms;
+  background-color: #00ffd8;
+}
+
+.confetti-piece:nth-child(9) {
+  left: 63%;
+  transform: rotate(-72deg);
+  animation: makeItRain 1000ms infinite ease-out;
+  animation-delay: 149ms;
+  animation-duration: 805ms;
+  background-color: #73ff00;
+}
+
+.confetti-piece:nth-child(10) {
+  left: 70%;
+  transform: rotate(10deg);
+  animation: makeItRain 1000ms infinite ease-out;
+  animation-delay: 351ms;
+  animation-duration: 1059ms;
+  background-color: #ff006e;
+}
+
+.confetti-piece:nth-child(11) {
+  left: 77%;
+  transform: rotate(4deg);
+  animation: makeItRain 1000ms infinite ease-out;
+  animation-delay: 307ms;
+  animation-duration: 1132ms;
+  background-color: #0026ff;
+}
+
+.confetti-piece:nth-child(12) {
+  left: 84%;
+  transform: rotate(42deg);
+  animation: makeItRain 1000ms infinite ease-out;
+  animation-delay: 464ms;
+  animation-duration: 776ms;
+  background-color: #ff4000;
+}
+
+@keyframes makeItRain {
+  from {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    transform: translateY(95vh);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
   }
 }

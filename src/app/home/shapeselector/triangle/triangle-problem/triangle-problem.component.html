@@ -21,18 +21,37 @@
   ></app-triangle-form>
 
   <!-- Results section shown only after submission -->
-  <div class="results-container" *ngIf="problem.submitted">
-    <h5>Results</h5>
+  <div
+    class="results-container"
+    *ngIf="problem.submitted"
+    aria-live="polite"
+    role="region"
+    aria-label="Triangle calculation results"
+  >
+    <h5 id="results-heading-{{ problem._id }}">Results</h5>
     <div
       class="result-item"
       [class.correct]="problem.isPerimeterCorrect"
       [class.incorrect]="problem.isPerimeterCorrect === false"
+      [attr.aria-label]="
+        'Perimeter: ' +
+        problem.perimeter +
+        (problem.isPerimeterCorrect ? ', correct' : ', incorrect')
+      "
     >
       <span class="result-label">Perimeter:</span>
       <div class="result-feedback">
         <span class="result-value">{{ problem.perimeter }}</span>
-        <span class="result-icon" *ngIf="problem.isPerimeterCorrect">✓</span>
-        <span class="result-icon" *ngIf="problem.isPerimeterCorrect === false"
+        <span
+          class="result-icon"
+          *ngIf="problem.isPerimeterCorrect"
+          aria-hidden="true"
+          >✓</span
+        >
+        <span
+          class="result-icon"
+          *ngIf="problem.isPerimeterCorrect === false"
+          aria-hidden="true"
           >✗</span
         >
       </div>
@@ -42,12 +61,25 @@
       class="result-item"
       [class.correct]="problem.isAreaCorrect"
       [class.incorrect]="problem.isAreaCorrect === false"
+      [attr.aria-label]="
+        'Area: ' +
+        problem.area +
+        (problem.isAreaCorrect ? ', correct' : ', incorrect')
+      "
     >
       <span class="result-label">Area:</span>
       <div class="result-feedback">
         <span class="result-value">{{ problem.area }}</span>
-        <span class="result-icon" *ngIf="problem.isAreaCorrect">✓</span>
-        <span class="result-icon" *ngIf="problem.isAreaCorrect === false"
+        <span
+          class="result-icon"
+          *ngIf="problem.isAreaCorrect"
+          aria-hidden="true"
+          >✓</span
+        >
+        <span
+          class="result-icon"
+          *ngIf="problem.isAreaCorrect === false"
+          aria-hidden="true"
           >✗</span
         >
       </div>
@@ -57,12 +89,25 @@
       class="result-item"
       [class.correct]="problem.isTypeCorrect"
       [class.incorrect]="problem.isTypeCorrect === false"
+      [attr.aria-label]="
+        'Type: ' +
+        problem.type +
+        (problem.isTypeCorrect ? ', correct' : ', incorrect')
+      "
     >
       <span class="result-label">Type:</span>
       <div class="result-feedback">
         <span class="result-value">{{ problem.type }}</span>
-        <span class="result-icon" *ngIf="problem.isTypeCorrect">✓</span>
-        <span class="result-icon" *ngIf="problem.isTypeCorrect === false"
+        <span
+          class="result-icon"
+          *ngIf="problem.isTypeCorrect"
+          aria-hidden="true"
+          >✓</span
+        >
+        <span
+          class="result-icon"
+          *ngIf="problem.isTypeCorrect === false"
+          aria-hidden="true"
           >✗</span
         >
       </div>
